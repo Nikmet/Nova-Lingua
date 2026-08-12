@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-09T18:10:48.699Z",
+  "title": "Design System: Nova Lingua",
+  "extensions": {
+    "colorMeta": {
+      "cobalt-500-working-cobalt": {
+        "role": "primary",
+        "displayName": "Working Cobalt",
+        "canonical": "oklch(43.1% 0.1669 259.0)",
+        "tonalRamp": ["#00122B", "#001C40", "#002B66", "#003A88", "#0049A9", "#3C7FD8", "#7FB0F0", "#AECEF8", "#D5E6FC", "#EDF4FE"]
+      },
+      "cobalt-800-ink-navy": {
+        "role": "primary",
+        "displayName": "Ink Navy",
+        "canonical": "oklch(23.1% 0.0771 255.4)",
+        "tonalRamp": ["#00122B", "#001C40", "#002B66", "#003A88", "#0049A9", "#3C7FD8", "#7FB0F0", "#AECEF8", "#D5E6FC", "#EDF4FE"]
+      },
+      "neutral-0-background": {
+        "role": "neutral",
+        "displayName": "Cold White",
+        "canonical": "oklch(98.6% 0.0020 255)",
+        "tonalRamp": ["#15191D", "#3B4047", "#575D65", "#6D747C", "#999FA7", "#C0C4CB", "#DBDEE3", "#E9EBEF", "#F3F5F7", "#F9FAFC"]
+      },
+      "neutral-900-foreground": {
+        "role": "neutral",
+        "displayName": "Ink Gray",
+        "canonical": "oklch(21.0% 0.0110 255)",
+        "tonalRamp": ["#15191D", "#3B4047", "#575D65", "#6D747C", "#999FA7", "#C0C4CB", "#DBDEE3", "#E9EBEF", "#F3F5F7", "#F9FAFC"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Every section headline and the hero H1. One scale, not stacked display sizes." },
+      "title": { "displayName": "Title", "purpose": "Card and tile headlines one step below a section heading." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy throughout, ~65-75ch max width." },
+      "label": { "displayName": "Label", "purpose": "Uppercase eyebrows and table/column headers." }
+    },
+    "shadows": [
+      { "name": "xs", "value": "0 1px 2px 0 oklch(23.1% 0.0771 255.4 / .07)", "purpose": "Reserved for buttons/inputs; unused on the landing today." },
+      { "name": "md", "value": "0 4px 12px -2px oklch(23.1% 0.0771 255.4 / .12), 0 2px 4px -2px oklch(23.1% 0.0771 255.4 / .07)", "purpose": "Reserved for popovers/dropdowns." },
+      { "name": "lg", "value": "0 12px 32px -8px oklch(23.1% 0.0771 255.4 / .20), 0 4px 8px -4px oklch(23.1% 0.0771 255.4 / .10)", "purpose": "Reserved for toasts/modals." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Default easing for every transition in the system." },
+      { "name": "press", "value": "120ms transform: scale(0.97)", "purpose": "Button/row press feedback." },
+      { "name": "quiz-step", "value": "200ms translateY(8px) + opacity", "purpose": "Question transition in the self-assessment quiz." },
+      { "name": "bento-reveal", "value": "500ms, 60ms stagger, whileInView once", "purpose": "Section tiles appearing on first scroll into view." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default in-flow action. 8px radius, Working Cobalt fill.",
+      "html": "<button class=\"ds-btn-primary\">Записаться</button>",
+      "css": ".ds-btn-primary { background: #0049A9; color: #F9FAFC; padding: 12px 22px; border-radius: 8px; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; transition: background 150ms cubic-bezier(0.25,1,0.5,1), transform 120ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-primary:hover { background: #003A88; } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px #0049A9; } .ds-btn-primary:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Pill CTA",
+      "kind": "button",
+      "refersTo": "button-pill",
+      "description": "The single highest-priority CTA per view. Full pill marks it as the one to press.",
+      "html": "<button class=\"ds-btn-pill\">Бесплатное пробное</button>",
+      "css": ".ds-btn-pill { background: #0049A9; color: #F9FAFC; padding: 16px 30px; border-radius: 9999px; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1rem; border: none; cursor: pointer; transition: background 150ms cubic-bezier(0.25,1,0.5,1), transform 120ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-pill:hover { background: #003A88; } .ds-btn-pill:focus-visible { outline: none; box-shadow: 0 0 0 3px #0049A9; } .ds-btn-pill:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Outline Choice Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Left-aligned outline button for picking one of several options (quiz answers) rather than issuing a command.",
+      "html": "<button class=\"ds-btn-outline\">Да, свободно</button>",
+      "css": ".ds-btn-outline { display: block; width: 100%; text-align: left; background: #F9FAFC; border: 1px solid #DBDEE3; color: #15191D; padding: 14px 18px; border-radius: 8px; font-family: Montserrat, sans-serif; font-weight: 500; font-size: 0.9375rem; cursor: pointer; transition: background 150ms cubic-bezier(0.25,1,0.5,1), border-color 150ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-outline:hover { background: #EDF4FE; border-color: #AECEF8; } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px #0049A9; }"
+    },
+    {
+      "name": "Level Badge",
+      "kind": "chip",
+      "refersTo": "badge-level",
+      "description": "The quiz result chip. Cobalt-100 fill with cobalt-700 text — a soft surface strong enough to hold body-sized text.",
+      "html": "<span class=\"ds-badge-level\">Ваш уровень — C1</span>",
+      "css": ".ds-badge-level { display: inline-flex; background: #D5E6FC; color: #002B66; border-radius: 8px; padding: 8px 14px; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 0.875rem; }"
+    },
+    {
+      "name": "Ink Navy Bento Tile",
+      "kind": "card",
+      "refersTo": "bento-tile-dark",
+      "description": "The brand speaking directly: hero message card, stat tiles that need full-weight emphasis. 24px radius, no shadow, no border.",
+      "html": "<div class=\"ds-tile-dark\"><div class=\"ds-tile-dark-eyebrow\">Тюмень · с 2012 года</div><h3 class=\"ds-tile-dark-title\">Язык, который не бросают</h3></div>",
+      "css": ".ds-tile-dark { background: #001C40; color: #EDF4FE; border-radius: 24px; padding: 40px; } .ds-tile-dark-eyebrow { font-family: Montserrat, sans-serif; font-size: 0.875rem; font-weight: 500; color: #7FB0F0; } .ds-tile-dark-title { font-family: 'Montserrat Alternates', sans-serif; font-weight: 700; font-size: 2rem; line-height: 1.08; letter-spacing: -0.02em; margin: 20px 0 0; }"
+    },
+    {
+      "name": "Self-Assessment Quiz Card",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature component. Fixed-height white card holding three phases (idle/active/done) so the surrounding hero layout never jumps.",
+      "html": "<div class=\"ds-quiz-card\"><div class=\"ds-quiz-progress\"><div class=\"ds-quiz-progress-fill\" style=\"width:37%\"></div></div><p class=\"ds-quiz-question\">Могу представиться и рассказать о себе</p><button class=\"ds-btn-outline\">Да, свободно</button></div>",
+      "css": ".ds-quiz-card { min-height: 360px; background: #FFFFFF; border-radius: 24px; padding: 40px; display: flex; flex-direction: column; gap: 24px; } .ds-quiz-progress { height: 3px; background: #E9EBEF; border-radius: 999px; overflow: hidden; } .ds-quiz-progress-fill { height: 100%; background: #0049A9; border-radius: 999px; transition: width 200ms cubic-bezier(0.25,1,0.5,1); } .ds-quiz-question { font-family: Montserrat, sans-serif; font-weight: 500; font-size: 1.1875rem; line-height: 1.4; margin: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Standing Appointment",
+    "overview": "Every promise on this page reduces to one idea: the same evening, the same teacher, the same slot, week after week. The visual system says this before the copy does. One chromatic axis, no decoration competing for attention, no scroll choreography — a page that behaves like a kept appointment, not a pitch. This is calm corporate minimalism for adults deciding whether to commit to twelve more Tuesdays: confident and specific, stating facts (group size, schedule, price) instead of selling with enthusiasm. The system explicitly rejects the two-axis warmth of \"friendly EdTech\" — soft illustrations, rounded mascot icons, cream-and-blue palettes — because Nova Lingua is a school with a street address and twelve years of history, not an app trying to look approachable. It also rejects any second brand color: hierarchy is built from scale-step and area within one cobalt axis, never from a new hue competing for the eye.",
+    "keyCharacteristics": [
+      "One chromatic axis (cobalt) carrying both interactive color and brand-deep fills; every neutral is cold-tinted toward it, never warm.",
+      "Low density, brand-register spacing (120px between sections) — restraint reads as premium, not as emptiness.",
+      "Flat by default. No shadow anywhere at rest; depth comes from color-step and border, not elevation.",
+      "Motion only as a direct response to an action (button press, quiz step advancing) — never ambient or decorative.",
+      "Type carries the same restraint as color: one display family for headlines, one body family for everything else, no third voice."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "The palette is a single hue family read at different lightness and chroma. Nothing in this system is \"the second color\" — what looks like variety is one axis stepped from near-white to near-black.", "section": "colors" },
+      { "name": "The Single-Voice Rule", "body": "No third typeface, ever. If a component needs to feel more technical, the fallback is the system ui-monospace stack, reserved for documentation contexts, never shipped on the landing itself.", "section": "typography" },
+      { "name": "The Transient-Only Rule", "body": "Shadow is reserved for surfaces that float temporarily above the page and disappear on their own (popover, toast, modal). A surface that's part of the permanent layout never gets a shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep every interactive color on the Working Cobalt axis (#0049A9 default, #003A88 hover). No second accent hue, ever, even for a \"special\" CTA.",
+      "Do use 24px tile radius for anything section-scale, and reserve 8px/pill for buttons only — don't blur the two scales.",
+      "Do state facts plainly in copy and components alike: numbers, schedule, price, group size. Confidence over persuasion.",
+      "Do keep sections at brand-register density (120px vertical padding between sections). This is a landing, not a dashboard — space is the argument.",
+      "Do animate only transform and opacity, only as a direct response to a user action.",
+      "Do show real teachers with names and real credentials when that section is built — never stock-photo generality."
+    ],
+    "donts": [
+      "Don't introduce a second brand color for hierarchy or \"visual interest.\"",
+      "Don't use warm or paper-toned neutrals, or a cream accent.",
+      "Don't use the reference palette's pastels #A8D0EF / #99C3E4 as interactive color — roughly 2.5:1 on white, below AA.",
+      "Don't reach for generic SaaS/EdTech warmth: soft illustrations, rounded mascot-style icons, \"friendly\" gradients.",
+      "Don't add box-shadow to any surface that's part of the permanent layout.",
+      "Don't use border-left/border-right as a colored accent stripe on any card or callout.",
+      "Don't use gradient text.",
+      "Don't encode status with color alone. Icon + word together, always."
+    ]
+  }
+}
