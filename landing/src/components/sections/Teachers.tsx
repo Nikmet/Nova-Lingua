@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { cn, withBase } from "@/lib/utils";
 
 /** Photos are language-independent, so they live here and are matched by position. */
 const PHOTOS = [
@@ -109,7 +109,7 @@ export function Teachers() {
             key={`photo-${active}`}
             ref={photo.ref}
             style={photo.style}
-            src={PHOTOS[active]}
+            src={withBase(PHOTOS[active])}
             alt={`${teacher.name}, ${t.teachers.photoAltSuffix}`}
             loading="lazy"
             decoding="async"

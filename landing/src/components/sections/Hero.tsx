@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { cn, withBase } from "@/lib/utils";
 
 function HeroPhoto() {
   const t = useT();
@@ -10,7 +10,7 @@ function HeroPhoto() {
       style={{ animationDelay: "40ms" }}
     >
       <img
-        src="/assets/hero-classroom.png"
+        src={withBase("/assets/hero-classroom.png")}
         alt={t.hero.photoAlt}
         fetchPriority="high"
         decoding="async"

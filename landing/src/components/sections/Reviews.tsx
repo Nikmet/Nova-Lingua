@@ -1,6 +1,7 @@
 import { useReveal } from "@/hooks/useReveal";
 import { useT } from "@/i18n";
 import type { Dict } from "@/i18n/ru";
+import { withBase } from "@/lib/utils";
 
 type Review = Dict["reviews"]["items"][number];
 
@@ -24,7 +25,7 @@ function ReviewCard({ r, photo, delay }: { r: Review; photo: string; delay: numb
       <figcaption className="mt-6 flex items-center gap-3 border-t border-divider pt-4">
         {/* Decorative: the name and programme sit right beside it in text. */}
         <img
-          src={photo}
+          src={withBase(photo)}
           alt=""
           loading="lazy"
           decoding="async"
@@ -64,7 +65,7 @@ export function Reviews() {
         <img
           ref={featuredPhoto.ref}
           style={featuredPhoto.style}
-          src="/assets/reviews/irina.png"
+          src={withBase("/assets/reviews/irina.png")}
           alt={t.reviews.featured.photoAlt}
           loading="lazy"
           decoding="async"
