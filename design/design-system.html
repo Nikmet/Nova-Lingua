@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Lingua · Design System</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Montserrat+Alternates:wght@500;600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style type="text/tailwindcss">
+  @custom-variant dark (&:where(.dark, .dark *));
+
+  @font-face{
+    font-family:"Futurespore";
+    src:url("./fonts/futuresporecyrillic.otf") format("opentype");
+    font-display:swap;
+  }
+
+  :root{
+    --background:        oklch(98.6% 0.0020 255);
+    --foreground:        oklch(21.0% 0.0110 255);
+    --card:              oklch(100% 0 0);
+    --card-foreground:   oklch(21.0% 0.0110 255);
+    --popover:           oklch(100% 0 0);
+    --popover-foreground:oklch(21.0% 0.0110 255);
+
+    /* Cobalt 500 = #0049A9, взят напрямую из логотипа */
+    --primary:           oklch(43.1% 0.1669 259.0);
+    --primary-foreground:oklch(98.2% 0.0041 91.4);
+    --secondary:         oklch(91.9% 0.0352 254.9);
+    --secondary-foreground:oklch(30.4% 0.1133 258.2);
+
+    --muted:             oklch(97.0% 0.0035 255);
+    --muted-foreground:  oklch(54.0% 0.0160 255);
+    /* accent это ховер-поверхность, не второй бренд-цвет: та же кобальтовая шкала */
+    --accent:            oklch(96.5% 0.0154 257.2);
+    --accent-foreground: oklch(30.4% 0.1133 258.2);
+
+    --destructive:       oklch(48.2% 0.1403 28.8);
+    --destructive-soft:  oklch(95.0% 0.0188 25.6);
+    --success:           oklch(43.3% 0.0792 161.9);
+    --success-soft:      oklch(95.5% 0.0173 159.1);
+    --warning:           oklch(47.0% 0.1000 71.2);
+    --warning-soft:      oklch(95.9% 0.0210 80.3);
+
+    --border:            oklch(90.0% 0.0075 255);
+    --input:             oklch(90.0% 0.0075 255);
+    --ring:              oklch(43.1% 0.1669 259.0);
+
+    /* #001C40 из логотипа; выворотка логотипа белая, текст рядом с ней берёт cobalt-50 */
+    --brand-deep:        oklch(23.1% 0.0771 255.4);
+    --brand-deep-fg:     oklch(96.5% 0.0154 257.2);
+
+    --radius:            0.625rem;
+  }
+
+  .dark{
+    --background:        oklch(17.5% 0.0180 257);
+    --foreground:        oklch(95.5% 0.0080 257);
+    --card:              oklch(21.0% 0.0220 257);
+    --card-foreground:   oklch(95.5% 0.0080 257);
+    --popover:           oklch(21.0% 0.0220 257);
+    --popover-foreground:oklch(95.5% 0.0080 257);
+
+    /* акцент тёмной темы это ступень cobalt-200, не отдельное значение */
+    --primary:           oklch(84.2% 0.0684 255.3);
+    --primary-foreground:oklch(18.3% 0.0580 253.8);
+    --secondary:         oklch(28.0% 0.0700 258.0);
+    --secondary-foreground:oklch(84.2% 0.0684 255.3);
+
+    --muted:             oklch(24.5% 0.0260 257);
+    --muted-foreground:  oklch(70.5% 0.0200 257);
+    --accent:            oklch(28.0% 0.0400 258);
+    --accent-foreground: oklch(84.2% 0.0684 255.3);
+
+    --destructive:       oklch(72.0% 0.1500 27.0);
+    --destructive-soft:  oklch(27.0% 0.0450 27.0);
+    --success:           oklch(76.0% 0.1200 163.0);
+    --success-soft:      oklch(26.0% 0.0330 162.0);
+    --warning:           oklch(80.0% 0.1150 75.0);
+    --warning-soft:      oklch(28.0% 0.0350 72.0);
+
+    --border:            oklch(31.0% 0.0330 257);
+    --input:             oklch(31.0% 0.0330 257);
+    --ring:              oklch(84.2% 0.0684 255.3);
+
+    /* на тёмном фоне «глубокий» уходит вверх по шкале, иначе сливается с карточкой */
+    --brand-deep:        oklch(30.4% 0.1133 258.2);
+    --brand-deep-fg:     oklch(96.5% 0.0154 257.2);
+  }
+
+  @theme inline{
+    --color-background:        var(--background);
+    --color-foreground:        var(--foreground);
+    --color-card:              var(--card);
+    --color-card-foreground:   var(--card-foreground);
+    --color-popover:           var(--popover);
+    --color-popover-foreground:var(--popover-foreground);
+    --color-primary:           var(--primary);
+    --color-primary-foreground:var(--primary-foreground);
+    --color-secondary:         var(--secondary);
+    --color-secondary-foreground:var(--secondary-foreground);
+    --color-muted:             var(--muted);
+    --color-muted-foreground:  var(--muted-foreground);
+    --color-accent:            var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive:       var(--destructive);
+    --color-destructive-soft:  var(--destructive-soft);
+    --color-success:           var(--success);
+    --color-success-soft:      var(--success-soft);
+    --color-warning:           var(--warning);
+    --color-warning-soft:      var(--warning-soft);
+    --color-border:            var(--border);
+    --color-input:             var(--input);
+    --color-ring:              var(--ring);
+    --color-brand-deep:        var(--brand-deep);
+    --color-brand-deep-fg:     var(--brand-deep-fg);
+
+    --radius-sm:   calc(var(--radius) - 4px);
+    --radius-md:   calc(var(--radius) - 2px);
+    --radius-lg:   var(--radius);
+    --radius-xl:   calc(var(--radius) + 4px);
+    --radius-tile: 24px;
+
+    --font-sans:    "Montserrat", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Montserrat Alternates", "Montserrat", sans-serif;
+    --font-mark:    "Futurespore", "Montserrat Alternates", sans-serif;
+
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  @layer base{
+    html{ scroll-behavior:smooth; }
+    body{ font-family:var(--font-sans); -webkit-font-smoothing:antialiased; }
+    .num{ font-variant-numeric:tabular-nums lining-nums; }
+    /* оптический стрелок-вейт: тонкая обводка пропадает на мелком кегле, толстая грубит на крупном */
+    svg.lucide{ stroke-width:2; }
+    svg.lucide.size-5, svg.lucide.size-6{ stroke-width:1.5; }
+    .mark{ font-family:var(--font-mark); letter-spacing:0.06em; }
+    .mono{ font-family:ui-monospace, "SF Mono", Menlo, monospace; }
+    ::selection{ background:color-mix(in oklch, var(--primary) 26%, transparent); }
+  }
+
+  @utility tile{
+    border-radius: var(--radius-tile);
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+    overflow: hidden;
+  }
+</style>
+</head>
+
+<body class="bg-background text-foreground antialiased">
+<div class="mx-auto max-w-[1680px] p-3 sm:p-4 lg:p-6">
+
+<!-- ============ IDENTITY ============ -->
+<div class="grid grid-cols-12 gap-3 auto-rows-[minmax(0,auto)]">
+
+  <!-- drenched brand tile -->
+  <section class="col-span-12 lg:col-span-5 rounded-[24px] bg-brand-deep text-brand-deep-fg p-8 lg:p-10 flex flex-col">
+    <img src="./assets/logo-inverse.svg" alt="Nova Lingua" class="w-[clamp(200px,26vw,290px)]">
+    <h1 class="font-display mt-7 text-[clamp(1.75rem,3.2vw,2.5rem)] font-bold leading-[1.05] tracking-tight">
+      Дизайн-система
+    </h1>
+    <p class="mt-3 max-w-[36ch] text-sm/6 opacity-70">
+      Один набор токенов на две поверхности: лендинг школы и админка администратора.
+    </p>
+
+    <nav class="mt-7 grid grid-cols-2 gap-x-6 border-t border-white/15 pt-5 text-sm">
+      <a href="#color" class="flex items-center justify-between border-b border-white/10 py-2 transition-opacity duration-150 hover:opacity-70">Цвет<i data-lucide="arrow-right" class="size-3.5 shrink-0 opacity-50"></i></a>
+      <a href="#type" class="flex items-center justify-between border-b border-white/10 py-2 transition-opacity duration-150 hover:opacity-70">Типографика<i data-lucide="arrow-right" class="size-3.5 shrink-0 opacity-50"></i></a>
+      <a href="#components" class="flex items-center justify-between border-b border-white/10 py-2 transition-opacity duration-150 hover:opacity-70">Компоненты<i data-lucide="arrow-right" class="size-3.5 shrink-0 opacity-50"></i></a>
+      <a href="#composition" class="flex items-center justify-between border-b border-white/10 py-2 transition-opacity duration-150 hover:opacity-70">Композиция<i data-lucide="arrow-right" class="size-3.5 shrink-0 opacity-50"></i></a>
+      <a href="#foundations" class="flex items-center justify-between py-2 transition-opacity duration-150 hover:opacity-70">Основания<i data-lucide="arrow-right" class="size-3.5 shrink-0 opacity-50"></i></a>
+    </nav>
+
+    <div class="mt-auto flex flex-wrap gap-1.5 pt-7">
+      <span class="inline-flex items-center rounded-md border border-white/20 bg-white/10 px-2 py-0.5 text-xs font-medium">shadcn/ui new-york</span>
+      <span class="inline-flex items-center rounded-md border border-white/20 bg-white/10 px-2 py-0.5 text-xs font-medium">Tailwind v4</span>
+      <span class="inline-flex items-center rounded-md border border-white/20 bg-white/10 px-2 py-0.5 text-xs font-medium">OKLCH</span>
+    </div>
+  </section>
+
+  <!-- design read -->
+  <section class="col-span-12 md:col-span-7 lg:col-span-4 tile p-7 flex flex-col justify-between">
+    <div>
+      <h2 class="font-display text-xl font-semibold tracking-tight">Как читается продукт</h2>
+      <p class="mt-3 text-sm/6 text-muted-foreground">
+        Премиальный лендинг для родителей и взрослых учеников плюс рабочая админка администратора.
+        Язык: спокойный корпоративный минимализм, одна кобальтовая ось на холодной нейтрали.
+      </p>
+
+      <p class="mt-6 text-xs font-medium">Сознательно не используем</p>
+      <ul class="mt-2.5 space-y-1.5 text-xs text-muted-foreground">
+        <li class="flex gap-2"><i data-lucide="minus" class="size-4 shrink-0 mt-0.5 shrink-0 text-muted-foreground/60"></i>Тёплые нейтрали и второй бренд-цвет: одна хроматическая ось на весь продукт</li>
+        <li class="flex gap-2"><i data-lucide="minus" class="size-4 shrink-0 mt-0.5 shrink-0 text-muted-foreground/60"></i>Антикву: бренд образовательный, не издательский</li>
+        <li class="flex gap-2"><i data-lucide="minus" class="size-4 shrink-0 mt-0.5 shrink-0 text-muted-foreground/60"></i>Декоративную анимацию в админке: только отклик на действие</li>
+      </ul>
+    </div>
+    <dl class="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-border bg-border">
+      <div class="bg-card px-3 py-3">
+        <dt class="text-[10.5px] text-muted-foreground">Регистр</dt>
+        <dd class="mt-0.5 text-sm font-semibold">Brand + Product</dd>
+      </div>
+      <div class="bg-card px-3 py-3">
+        <dt class="text-[10.5px] text-muted-foreground">Стратегия цвета</dt>
+        <dd class="mt-0.5 text-sm font-semibold">Committed</dd>
+      </div>
+      <div class="bg-card px-3 py-3">
+        <dt class="text-[10.5px] text-muted-foreground">Тема по умолчанию</dt>
+        <dd class="mt-0.5 text-sm font-semibold">Светлая</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- controls -->
+  <section class="col-span-12 md:col-span-5 lg:col-span-3 tile p-7 flex flex-col justify-between gap-6">
+    <div>
+      <h2 class="font-display text-xl font-semibold tracking-tight">Обе темы</h2>
+      <p class="mt-3 text-sm/6 text-muted-foreground">
+        Токены переключаются на <code class="mono rounded bg-muted px-1 py-0.5 text-[12px]">.dark</code>. Ни одно значение не равно чистому чёрному или белому.
+      </p>
+
+      <dl class="mt-5 space-y-px overflow-hidden rounded-xl border border-border">
+        <div class="flex items-center gap-3 bg-card px-3 py-2">
+          <dt class="mono flex-1 text-[11px] text-muted-foreground">background</dt>
+          <dd class="size-5 rounded border border-border" style="background:oklch(98.2% 0.0041 91.4)"></dd>
+          <dd class="size-5 rounded border border-border" style="background:oklch(18.9% 0.0281 255.9)"></dd>
+        </div>
+        <div class="flex items-center gap-3 border-t border-border bg-card px-3 py-2">
+          <dt class="mono flex-1 text-[11px] text-muted-foreground">card</dt>
+          <dd class="size-5 rounded border border-border" style="background:oklch(100% 0 0)"></dd>
+          <dd class="size-5 rounded border border-border" style="background:oklch(22.0% 0.0354 257.7)"></dd>
+        </div>
+        <div class="flex items-center gap-3 border-t border-border bg-card px-3 py-2">
+          <dt class="mono flex-1 text-[11px] text-muted-foreground">primary</dt>
+          <dd class="size-5 rounded border border-border" style="background:oklch(43.1% 0.1669 259.0)"></dd>
+          <dd class="size-5 rounded border border-border" style="background:oklch(84.2% 0.0684 255.3)"></dd>
+        </div>
+        <div class="flex items-center gap-3 border-t border-border bg-card px-3 py-2">
+          <dt class="mono flex-1 text-[11px] text-muted-foreground">border</dt>
+          <dd class="size-5 rounded border border-border" style="background:oklch(89.5% 0.0155 90.2)"></dd>
+          <dd class="size-5 rounded border border-border" style="background:oklch(31.2% 0.0495 260.3)"></dd>
+        </div>
+      </dl>
+      <p class="mt-2.5 text-[11px] text-muted-foreground">
+        Акцент тёмной темы это ступень <span class="mono">cobalt-200</span> той же шкалы, а не отдельный цвет.
+      </p>
+    </div>
+    <button id="themeToggle"
+      class="inline-flex h-9 w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border bg-background px-4 text-sm font-medium shadow-xs outline-none transition-all duration-150 hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.97]"
+      style="transition-timing-function:var(--ease-out-quart)">
+      <i data-lucide="moon" class="size-4 shrink-0 dark:hidden"></i><i data-lucide="sun" class="hidden size-4 shrink-0 dark:block"></i><span id="themeLabel">Тёмная тема</span>
+    </button>
+  </section>
+</div>
+
+<!-- ============ COLOR ============ -->
+<div id="color" class="mt-12 mb-4 flex items-baseline gap-4 scroll-mt-4">
+  <h2 class="font-display text-2xl font-semibold tracking-tight">Цвет</h2>
+  <div class="h-px flex-1 bg-border"></div>
+  <span class="mono text-[11px] text-muted-foreground">oklch</span>
+</div>
+
+<div class="grid grid-cols-12 gap-3">
+  <!-- primary ramp, contiguous -->
+  <section class="col-span-12 lg:col-span-8 rounded-[24px] overflow-hidden border border-border">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 bg-card px-6 py-4">
+      <h3 class="text-sm font-semibold">Cobalt</h3>
+      <p class="text-xs text-muted-foreground">Шкала выведена из логотипа, не подобрана заново.</p>
+    </div>
+    <div class="grid grid-cols-5 sm:grid-cols-10">
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(96.5% 0.0154 257.2)"><span class="mono text-[9.5px] text-[oklch(30%_0.11_258)]">50</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(91.9% 0.0352 254.9)"><span class="mono text-[9.5px] text-[oklch(30%_0.11_258)]">100</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(84.2% 0.0684 255.3)"><span class="mono text-[9.5px] text-[oklch(30%_0.11_258)]">200</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(74.8% 0.1068 255.4)"><span class="mono text-[9.5px] text-[oklch(23%_0.08_255)]">300</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(59.8% 0.1521 256.5)"><span class="mono text-[9.5px] text-white/90">400</span></div>
+      <div class="aspect-[4/3] p-2.5 flex flex-col justify-between ring-2 ring-inset ring-white/60" style="background:oklch(43.1% 0.1669 259.0)"><span class="mono text-[9px] text-white/70">#0049A9</span><span class="mono text-[9.5px] font-semibold text-white">500</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(36.9% 0.1414 258.8)"><span class="mono text-[9.5px] text-white/80">600</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(30.4% 0.1133 258.2)"><span class="mono text-[9.5px] text-white/80">700</span></div>
+      <div class="aspect-[4/3] p-2.5 flex flex-col justify-between ring-2 ring-inset ring-white/30" style="background:oklch(23.1% 0.0771 255.4)"><span class="mono text-[9px] text-white/60">#001C40</span><span class="mono text-[9.5px] text-white/80">800</span></div>
+      <div class="aspect-[4/3] p-2.5 flex items-end" style="background:oklch(18.3% 0.0580 253.8)"><span class="mono text-[9.5px] text-white/80">900</span></div>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-1 bg-card px-6 py-3 text-[11px] text-muted-foreground">
+      <span><span class="mono text-foreground">500</span> = <span class="mono">oklch(43.1% 0.1669 259)</span></span>
+      <span>Белый текст на 500: <span class="num font-semibold text-foreground">8.3:1</span></span>
+      <span>Отмеченные ступени взяты из SVG логотипа пипеткой.</span>
+    </div>
+  </section>
+
+  <!-- logo colorways -->
+  <section class="col-span-12 lg:col-span-4 rounded-[24px] overflow-hidden border border-border">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 bg-card px-6 py-4">
+      <h3 class="text-sm font-semibold">Логотип</h3>
+      <p class="text-xs text-muted-foreground">Один знак, две версии</p>
+    </div>
+    <div class="grid grid-cols-2">
+      <div class="flex items-center justify-center px-4 py-8" style="background:oklch(98.2% 0.0041 91.4)">
+        <img src="./assets/logo-ink.svg" alt="Nova Lingua, основная версия" class="w-full max-w-[130px]">
+      </div>
+      <div class="flex items-center justify-center px-4 py-8" style="background:oklch(23.1% 0.0771 255.4)">
+        <img src="./assets/logo-inverse.svg" alt="Nova Lingua, выворотка" class="w-full max-w-[130px]">
+      </div>
+    </div>
+    <div class="grid grid-cols-2 divide-x divide-border border-t border-border bg-card text-[11px]">
+      <div class="px-4 py-3">
+        <p class="font-medium">Основная</p>
+        <p class="mono mt-0.5 text-muted-foreground">#001C40 + #0049A9</p>
+        <p class="mt-1 text-muted-foreground">Бумага, карточка, светлая шапка</p>
+      </div>
+      <div class="px-4 py-3">
+        <p class="font-medium">Выворотка</p>
+        <p class="mono mt-0.5 text-muted-foreground">#FFFFFF</p>
+        <p class="mt-1 text-muted-foreground">Кобальт 800 и темнее, тёмная тема</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- neutrals -->
+  <section class="col-span-12 md:col-span-8 rounded-[24px] overflow-hidden border border-border">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 bg-card px-6 py-4">
+      <h3 class="text-sm font-semibold">Neutral</h3>
+      <p class="text-xs text-muted-foreground">Хроматичность 0.002 – 0.016 на тоне 255. Серый тонирован в кобальт.</p>
+    </div>
+    <div class="grid grid-cols-5 sm:grid-cols-10">
+      <div class="h-16 p-2 flex items-end" style="background:oklch(98.6% 0.0020 255)"><span class="mono text-[9.5px] text-[oklch(37%_0.013_255)]">0</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(97.0% 0.0035 255)"><span class="mono text-[9.5px] text-[oklch(37%_0.013_255)]">50</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(94.0% 0.0055 255)"><span class="mono text-[9.5px] text-[oklch(37%_0.013_255)]">100</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(90.0% 0.0075 255)"><span class="mono text-[9.5px] text-[oklch(37%_0.013_255)]">200</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(82.0% 0.0100 255)"><span class="mono text-[9.5px] text-[oklch(30%_0.012_255)]">300</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(70.0% 0.0130 255)"><span class="mono text-[9.5px] text-[oklch(21%_0.011_255)]">400</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(54.0% 0.0160 255)"><span class="mono text-[9.5px] text-white/90">500</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(47.5% 0.0150 255)"><span class="mono text-[9.5px] text-white/85">600</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(37.0% 0.0130 255)"><span class="mono text-[9.5px] text-white/85">700</span></div>
+      <div class="h-16 p-2 flex items-end" style="background:oklch(21.0% 0.0110 255)"><span class="mono text-[9.5px] text-white/85">900</span></div>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-1 border-b border-border bg-card px-6 py-3 text-[11px] text-muted-foreground">
+      <span><span class="mono text-foreground">500</span> это <span class="mono">muted-foreground</span>, <span class="num font-semibold text-foreground">4.9:1</span> на фоне страницы</span>
+      <span>Ни одна ступень не равна <span class="mono">#000</span> или <span class="mono">#fff</span>, кроме поверхности карточки</span>
+    </div>
+
+    <div class="bg-card px-6 py-5">
+      <p class="text-xs font-medium">Как ступени становятся поверхностями</p>
+      <div class="mt-3 rounded-xl bg-background p-4">
+        <p class="mono text-[10px] text-muted-foreground">background · neutral-0</p>
+        <div class="mt-2.5 rounded-lg border border-border bg-card p-4">
+          <p class="mono text-[10px] text-muted-foreground">card · #fff, граница neutral-200</p>
+          <div class="mt-2.5 rounded-md bg-muted px-3 py-2.5">
+            <p class="mono text-[10px] text-muted-foreground">muted · neutral-50, шапка таблицы и вложенный блок</p>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3 text-[11px] text-muted-foreground">
+        Разницу поверхностей держат три соседние ступени, а не тень. Поэтому плотный список в админке не превращается в шум.
+      </p>
+    </div>
+  </section>
+
+  <!-- policy -->
+  <section class="col-span-12 md:col-span-4 tile p-7">
+    <h3 class="text-sm font-semibold">Политика цвета</h3>
+    <p class="mt-3 text-sm/6 text-muted-foreground">
+      Одна хроматическая ось. Всё, что не состояние, это кобальт или нейтраль, тонированная в кобальт.
+    </p>
+    <ul class="mt-5 space-y-3 text-xs">
+      <li class="flex gap-3">
+        <span class="mt-0.5 size-4 shrink-0 rounded-[5px]" style="background:oklch(43.1% 0.1669 259.0)"></span>
+        <span><span class="font-medium">Кобальт.</span> <span class="text-muted-foreground">Действие, фокус, активное состояние, брендовая поверхность.</span></span>
+      </li>
+      <li class="flex gap-3">
+        <span class="mt-0.5 size-4 shrink-0 rounded-[5px] border border-border" style="background:oklch(90.0% 0.0075 255)"></span>
+        <span><span class="font-medium">Нейтраль.</span> <span class="text-muted-foreground">Текст, границы, поверхности, разделители.</span></span>
+      </li>
+      <li class="flex gap-3">
+        <span class="mt-0.5 flex shrink-0 gap-1">
+          <span class="size-4 rounded-[5px]" style="background:var(--success)"></span>
+          <span class="size-4 rounded-[5px]" style="background:var(--warning)"></span>
+          <span class="size-4 rounded-[5px]" style="background:var(--destructive)"></span>
+        </span>
+        <span><span class="font-medium">Три состояния.</span> <span class="text-muted-foreground">Успех, внимание, ошибка. Только статус, никогда не декор.</span></span>
+      </li>
+    </ul>
+    <p class="mt-5 border-t border-border pt-4 text-xs/5 text-muted-foreground">
+      Второго бренд-цвета нет. Иерархию внутри плитки задают ступень шкалы и площадь, а не новый оттенок.
+    </p>
+  </section>
+
+  <!-- semantic -->
+  <section class="col-span-12 tile px-6 py-5">
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <h3 class="text-sm font-semibold">Состояния домена</h3>
+      <p class="text-xs text-muted-foreground">Цвет всегда дублируется иконкой и текстом.</p>
+    </div>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-xl px-4 py-3.5" style="background:var(--success-soft)">
+        <div class="flex items-center gap-2 text-sm font-semibold" style="color:var(--success)"><i data-lucide="circle-check" class="size-4 shrink-0"></i>Success</div>
+        <p class="mt-1.5 text-xs" style="color:var(--success)">Посещение «пришёл», занятие подтверждено</p>
+      </div>
+      <div class="rounded-xl px-4 py-3.5" style="background:var(--warning-soft)">
+        <div class="flex items-center gap-2 text-sm font-semibold" style="color:var(--warning)"><i data-lucide="clock" class="size-4 shrink-0"></i>Warning</div>
+        <p class="mt-1.5 text-xs" style="color:var(--warning)">Заявка ждёт ответа, занятие перенесено</p>
+      </div>
+      <div class="rounded-xl px-4 py-3.5" style="background:var(--destructive-soft)">
+        <div class="flex items-center gap-2 text-sm font-semibold" style="color:var(--destructive)"><i data-lucide="circle-x" class="size-4 shrink-0"></i>Destructive</div>
+        <p class="mt-1.5 text-xs" style="color:var(--destructive)">Ученик отчислен, занятие отменено</p>
+      </div>
+      <div class="rounded-xl bg-secondary px-4 py-3.5">
+        <div class="flex items-center gap-2 text-sm font-semibold text-secondary-foreground"><i data-lucide="info" class="size-4 shrink-0"></i>Info</div>
+        <p class="mt-1.5 text-xs text-secondary-foreground">Новая заявка, системное уведомление</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ TYPE ============ -->
+<div id="type" class="mt-12 mb-4 flex items-baseline gap-4 scroll-mt-4">
+  <h2 class="font-display text-2xl font-semibold tracking-tight">Типографика</h2>
+  <div class="h-px flex-1 bg-border"></div>
+  <span class="mono text-[11px] text-muted-foreground">3 гарнитуры</span>
+</div>
+
+<div class="grid grid-cols-12 gap-3">
+  <!-- mark -->
+  <section class="col-span-12 lg:col-span-4 rounded-[24px] border border-dashed border-border bg-muted p-7 flex flex-col justify-between min-h-[220px]">
+    <div>
+      <div class="flex items-baseline justify-between gap-3">
+        <h3 class="text-sm font-semibold">Futurespore Cyrillic</h3>
+        <span class="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground"><i data-lucide="x" class="size-3 shrink-0"></i>не принят</span>
+      </div>
+      <p class="mt-2 text-xs/5 text-muted-foreground">
+        Рассмотрен как акцидентная гарнитура. Одно начертание, только прописные, без курсива: иерархию не строит.
+        Роль вордмарка уже занята SVG-логотипом, второй знак ей противоречил бы.
+      </p>
+    </div>
+    <div class="mark mt-6 text-[clamp(1.4rem,2.8vw,2rem)] leading-none text-muted-foreground/60">NOVA LINGUA</div>
+    <p class="mt-4 text-[10.5px] text-muted-foreground">Файл сохранён в <span class="mono">design/fonts/</span>. Andrew Young, Denis Ignatov, CC BY-SA 4.0.</p>
+  </section>
+
+  <!-- display -->
+  <section class="col-span-12 sm:col-span-6 lg:col-span-4 tile p-7 flex flex-col justify-between min-h-[220px]">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Montserrat Alternates</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">от 24px</span>
+    </div>
+    <div class="font-display my-5 text-[clamp(1.6rem,3vw,2.4rem)] font-semibold leading-[1.05] tracking-tight">Говорите свободно</div>
+    <p class="text-xs/5 text-muted-foreground">
+      Характерные альтернативные «и», «т», «a». На мелких кеглях мешают чтению, поэтому только заголовки.
+    </p>
+  </section>
+
+  <!-- ui -->
+  <section class="col-span-12 sm:col-span-6 lg:col-span-4 tile p-7 flex flex-col justify-between min-h-[220px]">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Montserrat</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">интерфейс и цифры</span>
+    </div>
+    <p class="my-5 max-w-[46ch] text-sm/6">
+      Администратор заводит заявку вручную, указывает источник и связывается с человеком в течение рабочего дня.
+    </p>
+    <p class="num text-sm text-muted-foreground">Вт/Чт 19:00 → 4 200 ₽ → 0123456789</p>
+  </section>
+
+  <!-- scale -->
+  <section class="col-span-12 tile overflow-x-auto">
+    <table class="w-full caption-bottom text-sm">
+      <thead class="[&_tr]:border-b">
+        <tr class="border-b transition-colors">
+          <th class="text-muted-foreground h-11 px-6 text-left align-middle text-xs font-medium whitespace-nowrap">Токен</th>
+          <th class="text-muted-foreground h-11 px-3 text-left align-middle text-xs font-medium whitespace-nowrap">Размер / интерлиньяж</th>
+          <th class="text-muted-foreground h-11 px-3 text-left align-middle text-xs font-medium whitespace-nowrap">Гарнитура</th>
+          <th class="text-muted-foreground h-11 px-6 text-left align-middle text-xs font-medium">Образец</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <td class="mono px-6 py-3 align-middle text-[11px] whitespace-nowrap">display-xl</td>
+          <td class="mono num px-3 py-3 align-middle text-[11px] text-muted-foreground whitespace-nowrap">clamp(2.5–4rem) / 1.05</td>
+          <td class="px-3 py-3 align-middle text-xs text-muted-foreground whitespace-nowrap">Alternates 700</td>
+          <td class="px-6 py-3 align-middle"><span class="font-display text-3xl font-bold tracking-tight">Говорите свободно</span></td>
+        </tr>
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <td class="mono px-6 py-3 align-middle text-[11px] whitespace-nowrap">display-lg</td>
+          <td class="mono num px-3 py-3 align-middle text-[11px] text-muted-foreground whitespace-nowrap">clamp(2–3rem) / 1.1</td>
+          <td class="px-3 py-3 align-middle text-xs text-muted-foreground whitespace-nowrap">Alternates 600</td>
+          <td class="px-6 py-3 align-middle"><span class="font-display text-2xl font-semibold tracking-tight">Программы обучения</span></td>
+        </tr>
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <td class="mono px-6 py-3 align-middle text-[11px] whitespace-nowrap">heading</td>
+          <td class="mono num px-3 py-3 align-middle text-[11px] text-muted-foreground whitespace-nowrap">1.25rem / 1.3</td>
+          <td class="px-3 py-3 align-middle text-xs text-muted-foreground whitespace-nowrap">Alternates 600</td>
+          <td class="px-6 py-3 align-middle"><span class="font-display text-xl font-semibold tracking-tight">Данные ученика</span></td>
+        </tr>
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <td class="mono px-6 py-3 align-middle text-[11px] whitespace-nowrap">body</td>
+          <td class="mono num px-3 py-3 align-middle text-[11px] text-muted-foreground whitespace-nowrap">0.9375rem / 1.55</td>
+          <td class="px-3 py-3 align-middle text-xs text-muted-foreground whitespace-nowrap">Montserrat 400</td>
+          <td class="px-6 py-3 align-middle"><span class="text-[0.9375rem]">Пробное занятие проходит в группе до шести человек</span></td>
+        </tr>
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <td class="mono px-6 py-3 align-middle text-[11px] whitespace-nowrap">body-sm</td>
+          <td class="mono num px-3 py-3 align-middle text-[11px] text-muted-foreground whitespace-nowrap">0.8125rem / 1.5</td>
+          <td class="px-3 py-3 align-middle text-xs text-muted-foreground whitespace-nowrap">Montserrat 400</td>
+          <td class="px-6 py-3 align-middle"><span class="text-[0.8125rem] text-muted-foreground">Обязательное поле, заполняется при первом контакте</span></td>
+        </tr>
+        <tr class="transition-colors hover:bg-muted/50">
+          <td class="mono px-6 py-3 align-middle text-[11px] whitespace-nowrap">figure</td>
+          <td class="mono num px-3 py-3 align-middle text-[11px] text-muted-foreground whitespace-nowrap">tabular-nums</td>
+          <td class="px-3 py-3 align-middle text-xs text-muted-foreground whitespace-nowrap">Montserrat 500</td>
+          <td class="px-6 py-3 align-middle"><span class="num text-base font-medium">19:00 · 4 200 ₽ · Кабинет 2</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<!-- ============ COMPONENTS ============ -->
+<div id="components" class="mt-12 mb-4 flex items-baseline gap-4 scroll-mt-4">
+  <h2 class="font-display text-2xl font-semibold tracking-tight">Компоненты</h2>
+  <div class="h-px flex-1 bg-border"></div>
+  <span class="mono text-[11px] text-muted-foreground">классы shadcn/ui</span>
+</div>
+
+<div class="grid grid-cols-12 gap-3">
+  <!-- buttons -->
+  <section class="col-span-12 lg:col-span-5 tile p-7">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Button</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">6 вариантов · 3 размера</span>
+    </div>
+    <div class="mt-5 flex flex-wrap items-center gap-2">
+      <button class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs outline-none transition-all duration-150 hover:bg-primary/90 focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)"><i data-lucide="send" class="size-4 shrink-0"></i>Оставить заявку</button>
+      <button class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-secondary px-4 text-sm font-medium text-secondary-foreground shadow-xs outline-none transition-all duration-150 hover:bg-secondary/80 active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)">Подробнее</button>
+      <button class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border bg-background px-4 text-sm font-medium shadow-xs outline-none transition-all duration-150 hover:bg-accent hover:text-accent-foreground active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)">Отмена</button>
+      <button class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 text-sm font-medium outline-none transition-all duration-150 hover:bg-accent hover:text-accent-foreground active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)">Пропустить</button>
+    </div>
+    <div class="mt-2.5 flex flex-wrap items-center gap-2">
+      <button class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-destructive px-4 text-sm font-medium text-white shadow-xs outline-none transition-all duration-150 hover:bg-destructive/90 active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)"><i data-lucide="user-minus" class="size-4 shrink-0"></i>Отчислить</button>
+      <button class="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow-xs transition-all duration-150 hover:bg-primary/90 active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)">Сохранить</button>
+      <button class="inline-flex size-9 shrink-0 items-center justify-center rounded-md border bg-background shadow-xs transition-all duration-150 hover:bg-accent active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)" aria-label="Ещё"><i data-lucide="ellipsis" class="size-4 shrink-0"></i></button>
+      <button disabled class="inline-flex h-9 shrink-0 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground opacity-50 pointer-events-none">Недоступно</button>
+    </div>
+    <p class="mono mt-5 rounded-lg bg-muted px-3 py-2.5 text-[10.5px] leading-relaxed text-muted-foreground">
+      &lt;Button&gt;, &lt;Button variant="secondary|outline|ghost|destructive"&gt;, size="sm|default|icon"
+    </p>
+  </section>
+
+  <!-- badges -->
+  <section class="col-span-12 md:col-span-7 lg:col-span-4 tile p-7">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Badge</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">статусы домена</span>
+    </div>
+    <div class="mt-5 flex flex-wrap gap-1.5">
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-transparent bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground [&>svg]:size-3.5"><i data-lucide="mail" class="size-4 shrink-0"></i>Новая</span>
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--warning-soft);color:var(--warning)"><i data-lucide="clock" class="size-4 shrink-0"></i>В работе</span>
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--success-soft);color:var(--success)"><i data-lucide="circle-check" class="size-4 shrink-0"></i>Конвертирована</span>
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--destructive-soft);color:var(--destructive)"><i data-lucide="circle-x" class="size-4 shrink-0"></i>Не пришёл</span>
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border px-2 py-0.5 text-xs font-medium text-foreground [&>svg]:size-3.5"><i data-lucide="archive" class="size-4 shrink-0"></i>Архивная</span>
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border px-2 py-0.5 text-xs font-medium text-foreground [&>svg]:size-3.5 [&>svg]:text-primary"><i data-lucide="sparkles" class="size-4 shrink-0"></i>Пробная группа</span>
+      <span class="inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--warning-soft);color:var(--warning)"><i data-lucide="refresh-cw" class="size-4 shrink-0"></i>Перенесено</span>
+    </div>
+    <p class="mt-5 text-xs/5 text-muted-foreground">
+      Администратор сканирует таблицу глазами, поэтому статус несёт иконку и слово. Цвет только усиливает.
+    </p>
+
+    <div class="mt-5 rounded-xl border border-dashed border-border p-4">
+      <p class="text-[11px] font-medium">Проверка: те же бейджи без цвета</p>
+      <div class="mt-2.5 flex flex-wrap gap-1.5 grayscale">
+        <span class="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground [&>svg]:size-3.5"><i data-lucide="mail" class="size-4 shrink-0"></i>Новая</span>
+        <span class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--warning-soft);color:var(--warning)"><i data-lucide="clock" class="size-4 shrink-0"></i>В работе</span>
+        <span class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--success-soft);color:var(--success)"><i data-lucide="circle-check" class="size-4 shrink-0"></i>Конвертирована</span>
+        <span class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--destructive-soft);color:var(--destructive)"><i data-lucide="circle-x" class="size-4 shrink-0"></i>Не пришёл</span>
+      </div>
+      <p class="mt-2.5 text-[11px] text-muted-foreground">Различимы: значение несут иконка и слово, а не оттенок.</p>
+    </div>
+  </section>
+
+  <!-- form -->
+  <section class="col-span-12 md:col-span-5 lg:col-span-3 tile p-7">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Input</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">форма заявки</span>
+    </div>
+    <div class="mt-5 space-y-4">
+      <div class="grid gap-2">
+        <label for="i-name" class="text-sm font-medium leading-none">Имя</label>
+        <input id="i-name" value="Марина Дьячкова" class="border-input placeholder:text-muted-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50">
+      </div>
+      <div class="grid gap-2">
+        <label for="i-lang" class="text-sm font-medium leading-none">Язык</label>
+        <input id="i-lang" aria-invalid="true" aria-describedby="i-lang-err" placeholder="Выберите язык" class="border-destructive placeholder:text-muted-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-destructive/20">
+        <p id="i-lang-err" class="flex items-center gap-1.5 text-xs text-destructive"><i data-lucide="circle-alert" class="size-3.5 shrink-0"></i>Выберите язык из справочника</p>
+      </div>
+    </div>
+    <p class="mt-5 text-xs/5 text-muted-foreground">Лейбл сверху, ошибка снизу. Плейсхолдер не заменяет лейбл.</p>
+  </section>
+
+  <!-- table -->
+  <section class="col-span-12 lg:col-span-8 tile">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border px-6 py-4">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-sm font-semibold">Table</h3>
+        <span class="mono text-[10.5px] text-muted-foreground">заявки</span>
+      </div>
+      <button class="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow-xs transition-all duration-150 hover:bg-primary/90 active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)"><i data-lucide="plus" class="size-3.5 shrink-0"></i>Новая заявка</button>
+    </div>
+    <div class="relative w-full overflow-x-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b">
+            <th class="text-muted-foreground h-10 px-6 text-left align-middle text-xs font-medium whitespace-nowrap">Имя</th>
+            <th class="text-muted-foreground h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap">Язык</th>
+            <th class="text-muted-foreground h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap">Источник</th>
+            <th class="text-muted-foreground h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap">Создана</th>
+            <th class="text-muted-foreground h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap">Статус</th>
+            <th class="h-10 w-10 px-6"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="px-6 py-2.5 align-middle font-medium whitespace-nowrap">Марина Дьячкова</td>
+            <td class="px-3 py-2.5 align-middle whitespace-nowrap">Испанский</td>
+            <td class="px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">Instagram</td>
+            <td class="num px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">06.08</td>
+            <td class="px-3 py-2.5 align-middle"><span class="inline-flex w-fit items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--warning-soft);color:var(--warning)"><i data-lucide="clock" class="size-4 shrink-0"></i>В работе</span></td>
+            <td class="px-6 py-2.5 align-middle text-muted-foreground"><i data-lucide="ellipsis-vertical" class="size-4 shrink-0"></i></td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="px-6 py-2.5 align-middle font-medium whitespace-nowrap">Тимур Абдуллаев</td>
+            <td class="px-3 py-2.5 align-middle whitespace-nowrap">Английский</td>
+            <td class="px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">Лендинг</td>
+            <td class="num px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">05.08</td>
+            <td class="px-3 py-2.5 align-middle"><span class="inline-flex w-fit items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5" style="background:var(--success-soft);color:var(--success)"><i data-lucide="circle-check" class="size-4 shrink-0"></i>Конвертирована</span></td>
+            <td class="px-6 py-2.5 align-middle text-muted-foreground"><i data-lucide="ellipsis-vertical" class="size-4 shrink-0"></i></td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="px-6 py-2.5 align-middle font-medium whitespace-nowrap">Ольга Прянишникова</td>
+            <td class="px-3 py-2.5 align-middle whitespace-nowrap">Китайский</td>
+            <td class="px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">Рекомендация</td>
+            <td class="num px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">05.08</td>
+            <td class="px-3 py-2.5 align-middle"><span class="inline-flex w-fit items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground [&>svg]:size-3.5"><i data-lucide="mail" class="size-4 shrink-0"></i>Новая</span></td>
+            <td class="px-6 py-2.5 align-middle text-muted-foreground"><i data-lucide="ellipsis-vertical" class="size-4 shrink-0"></i></td>
+          </tr>
+          <tr class="transition-colors hover:bg-muted/50">
+            <td class="px-6 py-2.5 align-middle font-medium whitespace-nowrap">Артём Гилёв</td>
+            <td class="px-3 py-2.5 align-middle whitespace-nowrap">Английский</td>
+            <td class="px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">Звонок</td>
+            <td class="num px-3 py-2.5 align-middle text-muted-foreground whitespace-nowrap">02.08</td>
+            <td class="px-3 py-2.5 align-middle"><span class="inline-flex w-fit items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium [&>svg]:size-3.5"><i data-lucide="archive" class="size-4 shrink-0"></i>Архив</span></td>
+            <td class="px-6 py-2.5 align-middle text-muted-foreground"><i data-lucide="ellipsis-vertical" class="size-4 shrink-0"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- empty state + toast, stacked -->
+  <div class="col-span-12 lg:col-span-4 grid gap-3">
+    <section class="tile p-7">
+      <div class="flex items-baseline justify-between gap-3">
+        <h3 class="text-sm font-semibold">Empty state</h3>
+        <span class="mono text-[10.5px] text-muted-foreground">нет заявок</span>
+      </div>
+      <div class="mt-5 flex flex-col items-start rounded-xl border border-dashed border-border px-5 py-7">
+        <i data-lucide="inbox" class="size-6 shrink-0 text-muted-foreground"></i>
+        <p class="mt-3 text-sm font-medium">Заявок пока нет</p>
+        <p class="mt-1 text-xs/5 text-muted-foreground">Форма на лендинге создаёт их сама. Заявку из звонка или Instagram заводят вручную.</p>
+        <button class="mt-4 inline-flex h-8 items-center gap-1.5 rounded-md border bg-background px-3 text-sm font-medium shadow-xs transition-all duration-150 hover:bg-accent active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)"><i data-lucide="plus" class="size-3.5 shrink-0"></i>Завести вручную</button>
+      </div>
+    </section>
+
+    <section class="tile p-7">
+      <div class="flex items-baseline justify-between gap-3">
+        <h3 class="text-sm font-semibold">Sonner</h3>
+        <span class="mono text-[10.5px] text-muted-foreground">вход 250 / выход 160</span>
+      </div>
+      <div class="mt-5 flex items-start gap-3 rounded-xl border border-border bg-popover px-4 py-3.5 shadow-lg">
+        <i data-lucide="circle-check" class="mt-px size-5 shrink-0 text-success"></i>
+        <div>
+          <p class="text-sm font-medium">Занятие перенесено</p>
+          <p class="mt-0.5 text-xs text-muted-foreground">Ученики группы получат уведомление во ВКонтакте</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ============ COMPOSITION ============ -->
+<div id="composition" class="mt-12 mb-4 flex items-baseline gap-4 scroll-mt-4">
+  <h2 class="font-display text-2xl font-semibold tracking-tight">Композиция</h2>
+  <div class="h-px flex-1 bg-border"></div>
+  <span class="mono text-[11px] text-muted-foreground">две поверхности</span>
+</div>
+
+<div class="grid grid-cols-12 gap-3">
+  <!-- landing hero -->
+  <section class="col-span-12 lg:col-span-7 tile">
+    <div class="border-b border-border px-6 py-4">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-sm font-semibold">Лендинг: герой</h3>
+        <span class="mono text-[10.5px] text-muted-foreground">split 7/5</span>
+      </div>
+    </div>
+    <div class="grid gap-0 sm:grid-cols-[1.25fr_1fr]">
+      <div class="flex flex-col justify-center gap-4 p-8">
+        <h4 class="font-display text-[clamp(1.4rem,2.4vw,2rem)] font-bold leading-[1.08] tracking-tight">Говорите свободно уже через три месяца</h4>
+        <p class="max-w-[34ch] text-sm/6 text-muted-foreground">Группы до шести человек, разговорная практика с первого занятия и пробный урок перед стартом.</p>
+        <div class="mt-1 flex flex-wrap items-center gap-2">
+          <button class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition-all duration-150 hover:bg-primary/90 active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)"><i data-lucide="send" class="size-4 shrink-0"></i>Оставить заявку</button>
+          <button class="inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium transition-all duration-150 hover:bg-accent hover:text-accent-foreground active:scale-[0.97]" style="transition-timing-function:var(--ease-out-quart)">Узнать свой уровень<i data-lucide="arrow-right" class="size-3.5 shrink-0"></i></button>
+        </div>
+      </div>
+      <div class="relative min-h-[220px] bg-muted flex items-center justify-center border-l border-border">
+        <div class="text-center">
+          <i data-lucide="image" class="size-6 shrink-0 text-muted-foreground"></i>
+          <p class="mono mt-2 text-[10.5px] text-muted-foreground">слот изображения 4:5</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- landing bento -->
+  <section class="col-span-12 lg:col-span-5 tile">
+    <div class="border-b border-border px-6 py-4">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-sm font-semibold">Лендинг: программы</h3>
+        <span class="mono text-[10.5px] text-muted-foreground">4 программы = 4 плитки</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 grid-rows-3 gap-2 p-4">
+      <div class="col-span-2 row-span-2 flex flex-col justify-end rounded-xl bg-brand-deep p-5 text-brand-deep-fg">
+        <h4 class="font-display text-lg font-semibold leading-tight">Бизнес-английский</h4>
+        <p class="mt-1 text-xs opacity-70">Переговоры и деловая переписка</p>
+        <p class="num mt-3 text-sm font-medium">от 5 200 ₽</p>
+      </div>
+      <div class="flex flex-col justify-end rounded-xl p-4 text-white" style="background:oklch(36.9% 0.1414 258.8)">
+        <h4 class="font-display text-sm font-semibold leading-tight">Испанский с нуля</h4>
+        <p class="num mt-1 text-[11px] opacity-80">от 3 900 ₽</p>
+      </div>
+      <div class="flex flex-col justify-end rounded-xl bg-secondary p-4 text-secondary-foreground">
+        <h4 class="font-display text-sm font-semibold leading-tight">Разговорный клуб</h4>
+        <p class="num mt-1 text-[11px] opacity-80">от 2 400 ₽</p>
+      </div>
+      <div class="col-span-3 flex items-end justify-between gap-3 rounded-xl bg-muted p-4">
+        <h4 class="font-display text-sm font-semibold leading-tight">Китайский для подростков</h4>
+        <p class="num text-[11px] text-muted-foreground">от 4 100 ₽</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- admin -->
+  <section class="col-span-12 tile">
+    <div class="border-b border-border px-6 py-4">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-sm font-semibold">Админка: расписание</h3>
+        <span class="mono text-[10.5px] text-muted-foreground">та же система, выше плотность</span>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-[190px_1fr]">
+      <nav class="hidden md:flex flex-col gap-0.5 border-r border-border bg-muted/40 p-3">
+        <img src="./assets/logo-ink.svg" alt="Nova Lingua" class="mb-4 ml-2 mt-1 w-[104px] dark:hidden">
+        <img src="./assets/logo-inverse.svg" alt="Nova Lingua" class="mb-4 ml-2 mt-1 hidden w-[104px] dark:block">
+        <a class="flex items-center gap-2.5 rounded-md bg-secondary px-2.5 py-2 text-[13px] font-medium text-secondary-foreground"><i data-lucide="mail" class="size-4 shrink-0"></i>Заявки</a>
+        <a class="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"><i data-lucide="circle-user" class="size-4 shrink-0"></i>Ученики</a>
+        <a class="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"><i data-lucide="users" class="size-4 shrink-0"></i>Группы</a>
+        <a class="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"><i data-lucide="calendar-check" class="size-4 shrink-0"></i>Расписание</a>
+        <a class="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"><i data-lucide="languages" class="size-4 shrink-0"></i>Языки</a>
+        <a class="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"><i data-lucide="door-open" class="size-4 shrink-0"></i>Кабинеты</a>
+      </nav>
+
+      <div class="p-5">
+        <div class="grid grid-cols-3 gap-2 text-[11px] font-medium text-muted-foreground">
+          <div class="px-2">Кабинет 1</div><div class="px-2">Кабинет 2</div><div class="px-2">Кабинет 3</div>
+        </div>
+        <div class="mt-1.5 grid grid-cols-3 gap-2">
+          <div class="space-y-2">
+            <div class="rounded-lg border border-border bg-card px-3 py-2.5">
+              <p class="num text-[11px] text-muted-foreground">17:00 – 18:30</p>
+              <p class="mt-0.5 text-[13px] font-medium">Китайский, подростки</p>
+            </div>
+            <div class="rounded-lg border border-border bg-card px-3 py-2.5">
+              <p class="num text-[11px] text-muted-foreground">19:00 – 20:30</p>
+              <p class="mt-0.5 text-[13px] font-medium">Английский A2</p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="rounded-lg bg-secondary px-3 py-2.5 text-secondary-foreground">
+              <p class="num text-[11px] opacity-75">18:00 – 19:00</p>
+              <p class="mt-0.5 flex items-start gap-1.5 text-[13px] font-medium"><i data-lucide="sparkles" class="mt-0.5 size-3.5 shrink-0"></i>Пробное, испанский</p>
+            </div>
+            <div class="rounded-lg px-3 py-2.5" style="background:var(--warning-soft)">
+              <p class="num text-[11px]" style="color:var(--warning);opacity:.85">19:00 – 20:30</p>
+              <p class="mt-0.5 flex items-start gap-1.5 text-[13px] font-medium" style="color:var(--warning)"><i data-lucide="refresh-cw" class="mt-0.5 size-3.5 shrink-0"></i>Перенесено с 12.08</p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="rounded-lg border border-border bg-card px-3 py-2.5">
+              <p class="num text-[11px] text-muted-foreground">18:30 – 19:30</p>
+              <p class="mt-0.5 text-[13px] font-medium">Индивидуально, Гилёв</p>
+            </div>
+            <div class="flex items-center justify-center rounded-lg border border-dashed border-border px-3 py-4">
+              <span class="text-[11px] text-muted-foreground">Свободно</span>
+            </div>
+          </div>
+        </div>
+        <p class="mt-4 text-xs/5 text-muted-foreground">Два занятия не могут занять один кабинет в одно время, поэтому конфликт не рисуется: он невозможен.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FOUNDATIONS ============ -->
+<div id="foundations" class="mt-12 mb-4 flex items-baseline gap-4 scroll-mt-4">
+  <h2 class="font-display text-2xl font-semibold tracking-tight">Основания</h2>
+  <div class="h-px flex-1 bg-border"></div>
+  <span class="mono text-[11px] text-muted-foreground">форма, тень, движение</span>
+</div>
+
+<div class="grid grid-cols-12 gap-3">
+  <!-- radius -->
+  <section class="col-span-12 sm:col-span-6 lg:col-span-3 tile p-7">
+    <h3 class="text-sm font-semibold">Радиус</h3>
+    <p class="mt-2 text-xs/5 text-muted-foreground">Три ступени. Контейнер мягче содержимого.</p>
+    <div class="mt-5 space-y-3">
+      <div class="flex items-center gap-4">
+        <div class="size-16 shrink-0 rounded-[24px] border-2 border-primary bg-secondary/40"></div>
+        <div><p class="text-xs font-medium">Плитка</p><p class="mono text-[10.5px] text-muted-foreground">24px</p></div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="size-16 shrink-0 rounded-xl border-2 border-primary bg-secondary/40"></div>
+        <div><p class="text-xs font-medium">Карточка</p><p class="mono text-[10.5px] text-muted-foreground">12px</p></div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="size-16 shrink-0 rounded-md border-2 border-primary bg-secondary/40"></div>
+        <div><p class="text-xs font-medium">Кнопка, поле, бейдж</p><p class="mono text-[10.5px] text-muted-foreground">8px</p></div>
+      </div>
+    </div>
+    <p class="mt-5 text-xs/5 text-muted-foreground">Скруглений-таблеток нет: они спорят с квадратными модулями сетки.</p>
+  </section>
+
+  <!-- elevation -->
+  <section class="col-span-12 sm:col-span-6 lg:col-span-4 tile p-7">
+    <h3 class="text-sm font-semibold">Высота</h3>
+    <p class="mt-2 text-xs/5 text-muted-foreground">Тень тонирована в кобальт. Чистого чёрного нет.</p>
+    <div class="mt-5 grid grid-cols-[1fr_1.15fr_1.3fr] items-center gap-4 rounded-xl bg-muted p-5">
+      <div class="rounded-xl bg-card px-3 py-5 text-center" style="box-shadow:0 1px 2px 0 oklch(23.1% 0.0771 255.4 / .07)"><p class="mono text-[10.5px] text-muted-foreground">xs</p><p class="mt-1 text-[11px]">кнопка</p></div>
+      <div class="rounded-xl bg-card px-3 py-7 text-center" style="box-shadow:0 4px 12px -2px oklch(23.1% 0.0771 255.4 / .12), 0 2px 4px -2px oklch(23.1% 0.0771 255.4 / .07)"><p class="mono text-[10.5px] text-muted-foreground">md</p><p class="mt-1 text-[11px]">поповер</p></div>
+      <div class="rounded-xl bg-card px-3 py-9 text-center" style="box-shadow:0 12px 32px -8px oklch(23.1% 0.0771 255.4 / .20), 0 4px 8px -4px oklch(23.1% 0.0771 255.4 / .10)"><p class="mono text-[10.5px] text-muted-foreground">lg</p><p class="mt-1 text-[11px]">тост, модалка</p></div>
+    </div>
+    <p class="mt-5 text-xs/5 text-muted-foreground">
+      В админке карточки живут на границе, а не на тени: плотный список из теней превращается в шум.
+      Тень тонирована в <span class="mono">#001C40</span>, поэтому не сереет на тёплой бумаге.
+    </p>
+  </section>
+
+  <!-- motion -->
+  <section class="col-span-12 lg:col-span-5 tile p-7">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Движение</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">ease-out-quart</span>
+    </div>
+    <dl class="mt-5 divide-y divide-border text-xs">
+      <div class="flex items-baseline justify-between gap-4 pb-2.5"><dt>Нажатие, <span class="text-muted-foreground">scale 0.97</span></dt><dd class="mono num text-muted-foreground">120ms</dd></div>
+      <div class="flex items-baseline justify-between gap-4 py-2.5"><dt>Дропдаун, поповер</dt><dd class="mono num text-muted-foreground">150ms</dd></div>
+      <div class="flex items-baseline justify-between gap-4 py-2.5"><dt>Модалка</dt><dd class="mono num text-muted-foreground">220ms</dd></div>
+      <div class="flex items-baseline justify-between gap-4 py-2.5"><dt>Тост, вход и выход</dt><dd class="mono num text-muted-foreground">250 / 160ms</dd></div>
+      <div class="flex items-baseline justify-between gap-4 pt-2.5"><dt>Клавиатурное действие</dt><dd class="mono text-muted-foreground">нет</dd></div>
+    </dl>
+    <p class="mt-4 text-xs/5 text-muted-foreground">
+      Анимируются только <span class="mono">transform</span> и <span class="mono">opacity</span>. При <span class="mono">prefers-reduced-motion</span> остаётся прозрачность.
+    </p>
+  </section>
+
+  <!-- icons -->
+  <section class="col-span-12 tile p-7">
+    <div class="flex flex-wrap items-baseline justify-between gap-3">
+      <h3 class="text-sm font-semibold">Иконки</h3>
+      <span class="mono text-[10.5px] text-muted-foreground">lucide-react, одна библиотека</span>
+    </div>
+    <div class="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-6 lg:grid-cols-12">
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="mail" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Заявка</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="circle-user" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Ученик</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="users" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Группа</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="calendar-check" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Занятие</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="door-open" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Кабинет</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="languages" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Язык</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="presentation" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Преподаватель</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="circle-check" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Пришёл</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="circle-x" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Не пришёл</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="refresh-cw" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Перенос</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="sparkles" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">Пробная</span></div>
+      <div class="flex flex-col items-center gap-1.5 bg-card px-2 py-4"><i data-lucide="link" class="size-5 shrink-0 text-primary"></i><span class="text-[10px] text-muted-foreground">ВКонтакте</span></div>
+    </div>
+
+    <div class="mt-5 flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:gap-8">
+      <div class="flex items-center gap-4">
+        <span class="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1"><i data-lucide="circle-check" class="size-3.5 shrink-0"></i><span class="mono text-[10px]">2</span></span>
+        <span class="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-1"><i data-lucide="circle-check" class="size-5 shrink-0"></i><span class="mono text-[10px]">1.5</span></span>
+      </div>
+      <p class="max-w-[70ch] text-xs/5 text-muted-foreground">
+        Толщина обводки зависит от размера: <span class="mono">2</span> на 14–16 px, <span class="mono">1.5</span> на 20–24 px.
+        Lucide нарисован под обводку 2 на сетке 24 px, поэтому при простом масштабировании тонкая линия пропадает на мелком кегле, а толстая грубит на крупном.
+        Залитых начертаний у Lucide нет, и статус в бейдже держится на фоне и слове, а не на плотности знака.
+      </p>
+    </div>
+  </section>
+</div>
+
+<footer class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6 pb-2">
+  <p class="text-xs text-muted-foreground">Nova Lingua, портфолио-проект EasyBusiness. Спецификация и токены: <span class="mono">design/design-system.md</span></p>
+  <p class="text-xs text-muted-foreground">Futurespore Cyrillic: Andrew Young, Denis Ignatov, CC BY-SA 4.0</p>
+</footer>
+
+</div>
+
+<script>
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const label = document.getElementById('themeLabel');
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+
+  // иконки солнца и луны обе в разметке, переключаются классом темы, а не перерисовкой SVG
+  lucide.createIcons();
+
+  function sync(){ label.textContent = root.classList.contains('dark') ? 'Светлая тема' : 'Тёмная тема'; }
+  sync();
+  btn.addEventListener('click', () => { root.classList.toggle('dark'); sync(); });
+</script>
+</body>
+</html>

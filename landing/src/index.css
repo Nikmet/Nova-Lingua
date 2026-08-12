@@ -1,0 +1,315 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: oklch(98.6% 0.0020 255);
+  --foreground: oklch(21.0% 0.0110 255);
+  /* Not pure #fff: every neutral on this page carries a trace of cobalt, including
+     the lightest one. Full white is the only untinted value in the system, so it
+     reads colder than the page it sits on. */
+  --card: oklch(99.4% 0.0020 255);
+  --card-foreground: oklch(21.0% 0.0110 255);
+  --popover: oklch(99.4% 0.0020 255);
+  --popover-foreground: oklch(21.0% 0.0110 255);
+
+  --primary: oklch(43.1% 0.1669 259.0);
+  --primary-foreground: oklch(98.6% 0.0020 255);
+  --primary-hover: oklch(36.9% 0.1414 258.8);
+  --secondary: oklch(91.9% 0.0352 254.9);
+  --secondary-foreground: oklch(30.4% 0.1133 258.2);
+
+  --muted: oklch(97.0% 0.0035 255);
+  --muted-foreground: oklch(54.0% 0.0160 255);
+  --accent: oklch(96.5% 0.0154 257.2);
+  --accent-foreground: oklch(30.4% 0.1133 258.2);
+
+  --border: oklch(90.0% 0.0075 255);
+  /* Inner rules between rows inside an already-bordered block; lighter than --border. */
+  --divider: oklch(94.0% 0.0055 255);
+  --input: oklch(90.0% 0.0075 255);
+  --ring: oklch(43.1% 0.1669 259.0);
+
+  --cobalt-200: oklch(84.2% 0.0684 255.3);
+  --cobalt-300: oklch(74.8% 0.1068 255.4);
+  --cobalt-700: oklch(30.4% 0.1133 258.2);
+
+  /* Two quiet body steps, both AA on --background: neutral-700 and neutral-600.
+     There is no lighter body step — neutral-400 lands at 2.6:1 and is not a text color. */
+  --body-muted: oklch(37.0% 0.0130 255);
+  --body-soft: oklch(47.6% 0.0149 255.6);
+
+  --brand-deep: oklch(23.1% 0.0771 255.4);
+  --brand-deep-fg: oklch(96.5% 0.0154 257.2);
+  /* One step below brand-deep, so the footer reads as a base rather than merging
+     into the brand-deep CTA panel directly above it. Footer only. */
+  --brand-base: oklch(18.3% 0.0580 253.8);
+
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-divider: var(--divider);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-cobalt-200: var(--cobalt-200);
+  --color-cobalt-300: var(--cobalt-300);
+  --color-cobalt-700: var(--cobalt-700);
+
+  --color-body-muted: var(--body-muted);
+  --color-body-soft: var(--body-soft);
+
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-deep-fg: var(--brand-deep-fg);
+  --color-brand-base: var(--brand-base);
+
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-tile: 24px;
+
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat Alternates", "Montserrat", sans-serif;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Transient-Only Rule: shadow exists for floating surfaces only (popover/dropdown). */
+  --shadow-popover: 0 4px 12px -2px oklch(23.1% 0.0771 255.4 / 0.12), 0 2px 4px -2px oklch(23.1% 0.0771 255.4 / 0.07);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* The teacher tab strip scrolls horizontally on narrow screens; a visible native
+   scrollbar reads as unfinished, the partially-cut-off next pill already signals
+   "more here". */
+@utility nl-scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* The header is sticky and ~72px tall; without this every in-page anchor
+   lands with its heading tucked underneath it. */
+:where(section[id], [id="zayavka"]) {
+  scroll-margin-top: 6rem;
+}
+
+/* One focus indicator for the whole page: 3px --ring, offset off the element's
+   own border so it reads on filled and outlined surfaces alike. Applied via
+   .nl-focus so no interactive element has to restate it. */
+/* Declared here, not as a var() fallback inside the shorthand: an undeclared custom
+   property substitutes as empty rather than falling back, which makes the whole
+   `outline` declaration invalid and silently drops the colour to currentColor. */
+:root {
+  --nl-ring-color: var(--ring);
+}
+
+@utility nl-focus {
+  &:focus-visible {
+    outline: 3px solid var(--nl-ring-color);
+    outline-offset: 2px;
+  }
+}
+
+/* Recolours .nl-focus for controls sitting on a brand-deep tile, where --ring
+   would only reach ~2:1 against the fill. Sets a variable rather than a second
+   outline rule so the two classes can never fight over source order. */
+@utility nl-focus-light {
+  --nl-ring-color: var(--brand-deep-fg);
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+@keyframes nl-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nl-fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nl-photo-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nl-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nl-swap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nl-popover-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nl-popover-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* Dropdown / popover: 150ms in, faster out, origin at the trigger. */
+.nl-popover[data-state="open"] {
+  animation: nl-popover-in 150ms var(--ease-out-quart);
+}
+
+.nl-popover[data-state="closed"] {
+  animation: nl-popover-out 110ms var(--ease-out-quart);
+}
+
+.nl-fade-in {
+  animation: nl-fade 500ms var(--ease-out-quart) both;
+}
+
+.nl-fade-down-in {
+  animation: nl-fade-down 500ms var(--ease-out-quart) both;
+}
+
+.nl-photo-in {
+  animation: nl-photo-in 700ms var(--ease-out-quart) both;
+}
+
+.nl-pop-in {
+  animation: nl-pop 400ms var(--ease-out-quart) both;
+}
+
+/* Interaction-speed swap (200-300ms), not a page-load entrance: teacher-tab content,
+   any other click-triggered content replacement. */
+.nl-swap-in {
+  animation: nl-swap 280ms var(--ease-out-quart) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nl-fade-in,
+  .nl-fade-down-in,
+  .nl-photo-in,
+  .nl-pop-in,
+  .nl-swap-in,
+  .nl-popover[data-state="open"],
+  .nl-popover[data-state="closed"] {
+    animation: none;
+  }
+}
+
+/* Scroll-triggered reveals: same visual language as the Hero's mount stagger above,
+   fired once via IntersectionObserver (useReveal) instead of on mount. */
+.nl-reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 500ms var(--ease-out-quart), transform 500ms var(--ease-out-quart);
+}
+
+.nl-reveal-scale {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 700ms var(--ease-out-quart), transform 700ms var(--ease-out-quart);
+}
+
+.nl-reveal-pop {
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 400ms var(--ease-out-quart), transform 400ms var(--ease-out-quart);
+}
+
+.nl-reveal.nl-revealed,
+.nl-reveal-scale.nl-revealed,
+.nl-reveal-pop.nl-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nl-reveal,
+  .nl-reveal-scale,
+  .nl-reveal-pop {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
