@@ -1,0 +1,105 @@
+// Схема админки Nova Lingua.
+// Язык модели — из CONTEXT.md: Администратор, Заявка, Ученик, Группа, Занятие,
+// Кабинет, Посещение, Язык, Преподаватель. Заявка, Занятие и Посещение —
+// следующий шаг (перенос/отмена Занятия, конвертация Заявки).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Именная учётная запись с доступом в систему. Учёток может быть несколько,
+/// права у всех одинаковые — ролевой иерархии в системе нет (CONTEXT.md).
+model Administrator {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("administrators")
+}
+
+/// Справочник языков, который ведёт Администратор — например английский,
+/// испанский, китайский. Группа и Пробная группа ссылаются на Язык (CONTEXT.md).
+model Language {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups Group[]
+
+  @@map("languages")
+}
+
+/// Физическое помещение, закреплённое за Занятием (CONTEXT.md). Сейчас в школе
+/// три Кабинета — два под групповые Занятия, один под индивидуальные, но это
+/// текущая реальность школы, а не ограничение модели.
+model Room {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("rooms")
+}
+
+/// Ведёт одну или несколько Групп; не привязан жёстко к одному Языку (CONTEXT.md).
+model Teacher {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups Group[]
+
+  @@map("teachers")
+}
+
+/// Человек, записанный хотя бы в одну Группу; создаётся при конвертации Заявки
+/// (сама конвертация — следующий шаг, здесь Ученик заводится напрямую). Явный
+/// статус «отчислен» ставит Администратор вручную, отдельно от членства
+/// в активных Группах (CONTEXT.md). Привязка ВКонтакте необязательна: если её
+/// нет, уведомления не отправляются и расписание Ученик узнаёт у Администратора
+/// вручную, вне системы — поэтому других контактных полей здесь нет.
+model Student {
+  id         String    @id @default(cuid())
+  name       String
+  vkId       String?
+  expelledAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  groups Group[] @relation("GroupStudents")
+
+  @@map("students")
+}
+
+/// Долгоживущий объект с Преподавателем, составом Учеников и повторяющимся
+/// шаблоном времени, из которого генерируются Занятия (следующий шаг). Явного
+/// статуса нет — активна, пока есть будущие Занятия; это не хранимое поле, а
+/// производная величина. Индивидуальное занятие — это Группа с одним Учеником,
+/// без отдельной логики. Пробная группа — Группа с признаком isTrial,
+/// создаваемая заново на дату и язык, например «Пробное 20.08» (CONTEXT.md).
+model Group {
+  id               String   @id @default(cuid())
+  name             String
+  isTrial          Boolean  @default(false)
+  scheduleTemplate String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  teacherId  String
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  languageId String
+  language   Language @relation(fields: [languageId], references: [id])
+  students   Student[] @relation("GroupStudents")
+
+  @@map("groups")
+}
